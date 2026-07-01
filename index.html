@@ -345,5 +345,64 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
         </svg>
     </a>
+    <audio id="bgMusic" loop>
+        <source src="asset/Happy.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="musicBtn" aria-label="Putar Musik Latar"
+        class="fixed bottom-20 right-4 sm:bottom-24 sm:right-8 z-[999] bg-[var(--enamel)] text-white p-3 rounded-full shadow-[4px_4px_0px_0px_var(--ink)] border-2 border-[var(--ink)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-300 flex items-center justify-center">
+        <svg id="playIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pauseIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </button>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        music.volume = 0.4; // Atur volume (0.0 - 1.0)
+
+        // Fungsi untuk menyalakan musik & mengubah ikon
+        function playTheMusic() {
+            music.play().then(() => {
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                musicBtn.classList.add('animate-[spin_8s_linear_infinite]');
+                
+                // Hapus event listener autoplay setelah musik berhasil jalan
+                window.removeEventListener('click', autoplayTrigger);
+                window.removeEventListener('scroll', autoplayTrigger);
+                window.removeEventListener('touchstart', autoplayTrigger);
+            }).catch(error => {
+                console.log("Autoplay diblokir browser, menunggu interaksi user.");
+            });
+        }
+
+        // Trik Autoplay: Jalan begitu user klik, scroll, atau sentuh layar pertama kali
+        function autoplayTrigger() {
+            playTheMusic();
+        }
+        window.addEventListener('click', autoplayTrigger);
+        window.addEventListener('scroll', autoplayTrigger);
+        window.addEventListener('touchstart', autoplayTrigger);
+
+        // Fungsi Tombol Manual (Play/Pause kalau diklik langsung)
+        musicBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Biar tidak bentrok dengan fungsi autoplayTrigger
+            if (music.paused) {
+                playTheMusic();
+            } else {
+                music.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                musicBtn.classList.remove('animate-[spin_8s_linear_infinite]');
+            }
+        });
+    </script>
 </body>
 </html>
