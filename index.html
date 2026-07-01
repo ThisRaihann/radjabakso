@@ -276,9 +276,37 @@
             <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
                 <img src="asset/ruko2.jpeg" alt="Depan Kedai" class="w-full h-full object-cover">
             </div>
-            <!-- Foto 4 (bisa tambah gambar lain) -->
+            <!-- Foto 4 -->
             <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
-                <img src="asset/ruko3.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+                <img src="asset/ruko4.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 5 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko5.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 6 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko6.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 7 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko7.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 8 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko8.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 9 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko9.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 10 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko10.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
+            </div>
+            <!-- Foto 11 -->
+            <div class="overflow-hidden rounded-2xl h-56 sm:h-64 border-2 border-[var(--ink)] shadow-lg hover:-translate-y-2 transition-all">
+                <img src="asset/ruko11.jpeg" alt="Detail Menu" class="w-full h-full object-cover">
             </div>
         </div>
     </section>
@@ -349,27 +377,60 @@
         <source src="asset/Happy.mp3" type="audio/mpeg">
     </audio>
 
+    <button id="musicBtn" aria-label="Putar Musik Latar"
+        class="fixed bottom-20 right-4 sm:bottom-24 sm:right-8 z-[999] bg-[var(--enamel)] text-white p-3 rounded-full shadow-[4px_4px_0px_0px_var(--ink)] border-2 border-[var(--ink)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-300 flex items-center justify-center">
+        <svg id="playIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pauseIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </button>
+
     <script>
         const music = document.getElementById('bgMusic');
-        music.volume = 0.3; // Volume diatur agak pelan (30%) agar tidak mengagetkan pengunjung
+        const musicBtn = document.getElementById('musicBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
 
-        // Fungsi untuk memutar musik secara otomatis
-        function startAutoplay() {
+        music.volume = 0.4; // Atur volume (0.0 - 1.0)
+
+        // Fungsi untuk menyalakan musik & mengubah ikon
+        function playTheMusic() {
             music.play().then(() => {
-                // Jika berhasil berputar, hapus semua pemicu agar tidak mengulang perintah play
-                window.removeEventListener('click', startAutoplay);
-                window.removeEventListener('scroll', startAutoplay);
-                window.removeEventListener('touchstart', startAutoplay);
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                musicBtn.classList.add('animate-[spin_8s_linear_infinite]');
+                
+                // Hapus event listener autoplay setelah musik berhasil jalan
+                window.removeEventListener('click', autoplayTrigger);
+                window.removeEventListener('scroll', autoplayTrigger);
+                window.removeEventListener('touchstart', autoplayTrigger);
             }).catch(error => {
-                // Mengatasi restriksi browser jika interaksi belum dianggap sah
-                console.log("Menunggu interaksi pengguna untuk memutar musik.");
+                console.log("Autoplay diblokir browser, menunggu interaksi user.");
             });
         }
 
-        // Pemicu: Musik jalan begitu user klik, scroll, atau sentuh layar pertama kali
-        window.addEventListener('click', startAutoplay);
-        window.addEventListener('scroll', startAutoplay);
-        window.addEventListener('touchstart', startAutoplay);
+        // Trik Autoplay: Jalan begitu user klik, scroll, atau sentuh layar pertama kali
+        function autoplayTrigger() {
+            playTheMusic();
+        }
+        window.addEventListener('click', autoplayTrigger);
+        window.addEventListener('scroll', autoplayTrigger);
+        window.addEventListener('touchstart', autoplayTrigger);
+
+        // Fungsi Tombol Manual (Play/Pause kalau diklik langsung)
+        musicBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Biar tidak bentrok dengan fungsi autoplayTrigger
+            if (music.paused) {
+                playTheMusic();
+            } else {
+                music.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                musicBtn.classList.remove('animate-[spin_8s_linear_infinite]');
+            }
+        });
     </script>
 </body>
 </html>
